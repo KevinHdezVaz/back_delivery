@@ -95,6 +95,8 @@ module.exports = {
                     roles: myUser.roles
                 };
                 
+
+                await User.updateSessionToken(myUser.id,`JWT ${token}`);
                 return res.status(201).json({
                     success: true,
                     message: 'El usuario ha sido autenticado',
@@ -163,7 +165,36 @@ module.exports = {
             });
         }
 
-    }
+    },
 
+    async updatewithoutImage(req, res, next) {
+
+        try {
+            
+
+            const user =  (req.body); // CLIENTE DEBE ENVIARNOS UN OBJETO USER 
+            console.log('Usuario Parseado', user);
+
+            
+
+            await User.update(user); // GUARDANDO LA URL EN LA BASE DE DATOS
+
+            return res.status(201).json({
+                success: true,
+                message: 'Los datos del usuario se han actualizado correctamente',
+                data: user
+            });
+
+        } 
+        catch (error) {
+            console.log(`Error: ${error}`);
+            return res.status(501).json({
+                success: false,
+                message: 'Hubo un error al actualizar los datos del usuario',
+                error: error
+            });
+        }
+
+    }
 
 };
