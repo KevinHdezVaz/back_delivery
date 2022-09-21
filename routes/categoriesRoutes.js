@@ -9,4 +9,6 @@ module.exports = (app, upload) => {
      // GUARDAR DATOS
      app.get('/api/categories/getAll',  passport.authenticate('jwt',{session: false}), CategoriesController.getAll);
  
+
+     
 }

@@ -35,7 +35,7 @@ module.exports ={
         } catch (error) {
             console.log('Error', error);
            
-            return res.status(201).json({
+            return res.status(501).json({
                 success: false,
                 message: 'Error al crear la categoria',
                 error: error
