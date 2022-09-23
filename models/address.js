@@ -1,25 +1,25 @@
 const db = require('../config/config');
-const Address ={};
 
-Address.findbyUser= (id_user)  => { 
+const Address = {};
+
+Address.findByUser = (id_user) => {
 
     const sql = `
-    SELECT 
-id,
-id_user,
-address,
-neightborhood,
-lat,
-lng
-
-FROM
-address
-WHERE
-id_user=$1
+    SELECT
+        id,
+        id_user,
+        address,
+        neightborhood,
+        lat,
+        lng
+    FROM
+        address
+    WHERE
+        id_user = $1
     `;
 
+    return db.manyOrNone(sql, id_user)
 
-    return db.manyOrNone(sql,id_user)
 }
 
 

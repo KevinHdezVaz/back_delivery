@@ -1,6 +1,4 @@
-const Address = require('../models/address');
-const Category = require('../models/category')
-const storage = require('../utils/cloud_storage')
+const Address = require('../models/address'); 
 
 module.exports = {
     async create(req, res, next) {
@@ -26,23 +24,21 @@ module.exports = {
         }
     }
 ,
-async findbyUser(req, res, next) {
+async findByUser(req, res, next) {
     try {
-
+        
         const id_user = req.params.id_user;
-        const data = await Address.findbyUser(id_user)
-
-        return res.status(201).json( 
-          data);
-
-    } catch (error) {
-        console.log('Error', error);
+        const data = await Address.findByUser(id_user);
+        return res.status(201).json(data);
+    } 
+    catch (error) {
+        console.log(`Error ${error}`);    
         return res.status(501).json({
             success: false,
-            message: 'Error al crear la dirección',
+            message: 'Hubo un error creando la direccion',
             error: error
         });
-
     }
 }
+
 }
