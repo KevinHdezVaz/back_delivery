@@ -305,5 +305,6 @@ Order.updateLatLng = (order) => {
         order.lng
     ]);
 }
+ 
 
 module.exports = Order;
