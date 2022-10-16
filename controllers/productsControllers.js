@@ -1,24 +1,19 @@
+const Product = require('../models/products');
 const storage = require('../utils/cloud_storage');
-const Product = require('../models/products')
 const asyncForEach = require('../utils/async_foreach');
-const { update } = require('./usersController');
-const { findbyCategory } = require('../models/products');
 
 module.exports = {
 
-    async findbyCategory(req,res,next){
-
+    async findByCategory(req, res, next) {
         try {
-
-            const id_category = req.params.id_category;
-            const data = await Product.findbyCategory(id_category)
-
-            return res.status(201).json(data)
-            
-        }  catch (error) {
+            const id_category = req.params.id_category; // CLIENTE
+            const data = await Product.findByCategory(id_category);
+            return res.status(201).json(data);
+        } 
+        catch (error) {
             console.log(`Error: ${error}`);
             return res.status(501).json({
-                message: `Error al listas los productos  ${error}`,
+                message: `Error al listar los productos por categoria`,
                 success: false,
                 error: error
             });
@@ -26,10 +21,11 @@ module.exports = {
     },
 
     async create(req, res, next) {
+
         let product = JSON.parse(req.body.product);
- 
+
         const files = req.files;
- 
+
         let inserts = 0;
         
         if (files.length === 0) {
@@ -43,12 +39,12 @@ module.exports = {
                 
                 const data = await Product.create(product); // ALMACENANDO LA INFORMACION
                 product.id = data.id;
- 
+
                 const start = async () => {
                      await asyncForEach(files, async (file) => {
                         const pathImage = `image_${Date.now()}`;
                         const url = await storage(file, pathImage);
- 
+
                         if (url !== undefined && url !== null) {
                             if (inserts == 0) { // IMAGEN 1
                                 product.image1 = url;
@@ -60,23 +56,23 @@ module.exports = {
                                 product.image3 = url;
                             }
                         }
- 
+
                         await Product.update(product);
                         inserts = inserts + 1;
- 
+
                         if (inserts == files.length) {
                             return res.status(201).json({
                                 success: true,
                                 message: 'El producto se ha registrado correctamente'
                             });
                         }
- 
+
                      }); 
- 
+
                 }
- 
+
                 start();
- 
+
             } 
             catch (error) {
                 console.log(`Error: ${error}`);
@@ -87,10 +83,7 @@ module.exports = {
                 });
             }
         }
- 
-    
+
     }
-
-
 
 }

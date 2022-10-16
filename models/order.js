@@ -199,7 +199,7 @@ Order.findByDeliveryAndStatus = (id_delivery, status) => {
 		JSON_BUILD_OBJECT(
             'id', A.id,
             'address', A.address,
-            'neighborhood', A.neighborhood,
+            'neightborhood', A.neightborhood,
             'lat', A.lat,
             'lng', A.lng
         ) AS address

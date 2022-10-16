@@ -1,8 +1,10 @@
-const Order = require('../models/order'); 
+const Order = require('../models/order');
+const User = require('../models/user');
 const OrderHasProduct = require('../models/order_has_products');
-const timeRelative = require('../utils/time_relative')
-
+const timeRelative = require('../utils/time_relative');
+ 
 module.exports = {
+
 
     async findByStatus(req, res, next) {
 
@@ -35,10 +37,10 @@ module.exports = {
             const id_client = req.params.id_client;
             let data = await Order.findByClientAndStatus(id_client, status);
             
-      
             data.forEach(d => {
                 d.timestamp = timeRelative(new Date().getTime(), d.timestamp);
             })
+
             // console.log('Order: ', data);
 
             return res.status(201).json(data);
@@ -64,6 +66,7 @@ module.exports = {
             data.forEach(d => {
                 d.timestamp = timeRelative(new Date().getTime(), d.timestamp);
             })
+
             // console.log('Order: ', data);
 
             return res.status(201).json(data);
@@ -118,16 +121,9 @@ module.exports = {
             let order = req.body;
             order.status = 'DESPACHADO';
             await Order.update(order);
+ 
 
-            const user = await User.getNotificationTokenById(order.id_delivery);
-
-
-            await pushNotificationController.sendNotification(user.notification_token, {
-                title: 'PEDIDO ASIGNADO',
-                body: 'Te han asignado un pedido',
-                id_notification: '2'                
-            })
-
+ 
             return res.status(201).json({
                 success: true,
                 message: 'La orden se actualizo correctamente',
@@ -150,14 +146,9 @@ module.exports = {
             order.status = 'EN CAMINO';
             await Order.update(order);
 
-            const user = await User.getNotificationTokenById(order.id_client);
+ 
 
-
-            await pushNotificationController.sendNotification(user.notification_token, {
-                title: 'TU PEDIDO ESTA EN CAMINO',
-                body: 'Un repartidor esta en camino con tu pedido',
-                id_notification: '3'                
-            })
+         
             
             return res.status(201).json({
                 success: true,

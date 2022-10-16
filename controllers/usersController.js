@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
 const storage = require('../utils/cloud_storage');
+const { findDeliveryMen } = require('../models/user');
 
 module.exports = {
 
@@ -22,6 +23,20 @@ module.exports = {
         }
     },
 
+    async findDeliveryMen(req, res, next) {
+        try {
+            const data = await User.findDeliveryMen();    
+            console.log(`Usuarios: ${data}`);
+            return res.status(201).json(data);
+        } 
+        catch (error) {
+            console.log(`Error: ${error}`);
+            return res.status(501).json({
+                success: false,
+                message: 'Error al obtener los usuarios'
+            });
+        }
+    },
     async register(req, res, next) {
         try {
             
@@ -124,6 +139,31 @@ module.exports = {
         }
 
     },
+    async updateNotificationToken(req, res, next) {
+
+        try {
+            
+            const user = req.body; // CLIENTE
+
+            await User.updateNotificationToken(user.id, user.notification_token)
+
+            return res.status(201).json({
+                success: true,
+                message: 'El token de notificaciones se ha almacenado correctamente'
+            });
+
+        } 
+        catch (error) {
+            console.log(`Error: ${error}`);
+            return res.status(501).json({
+                success: false,
+                message: 'Hubo un error al actualizar el token de notificacion',
+                error: error
+            });
+        }
+
+    },
+
 
     async update(req, res, next) {
 
